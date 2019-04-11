@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 @Api(tags = "BookController", description = "字典接口列表")
 public class SysDictController {
 
-
     @Autowired
     ISysDictService sysDictService;
 
