@@ -41,13 +41,11 @@
             <groupId>com.iframe</groupId>
             <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <!--<scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>com.iframe</groupId>
             <artifactId>interfaces</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <!--<scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
