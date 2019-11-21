@@ -13,6 +13,8 @@ public class DBconfig {
     @Autowired
     private Environment env;
 
+    //定时任务
+    //深圳
     @Bean(name="dataSource")
     public ComboPooledDataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
@@ -30,3 +32,4 @@ public class DBconfig {
     }
 
 }
+
