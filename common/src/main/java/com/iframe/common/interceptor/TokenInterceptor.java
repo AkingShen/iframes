@@ -1,6 +1,8 @@
 package com.iframe.common.interceptor;
 
+import com.alibaba.fastjson.JSONObject;
 import com.iframe.common.annotations.CheckToken;
+import com.iframe.common.utils.RetResponse;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -9,6 +11,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Component
 public class TokenInterceptor  extends HandlerInterceptorAdapter {
@@ -39,9 +43,24 @@ public class TokenInterceptor  extends HandlerInterceptorAdapter {
 
         //3:token为空
         if(StringUtils.isBlank(token)){
-            System.out.println("token 为空，无法通过拦截器");
+            PrintWriter writer = null;
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html; charset=utf-8");
+            try {
+                writer = response.getWriter();
+                writer.print(JSONObject.toJSONString(RetResponse.makeErrUnauisp("无效令牌")));
+
+            } catch (IOException e) {
+
+            } finally {
+                if (writer != null)
+                    writer.close();
+            }
+
             return  false;
         }
+        //验证token 正确性
+
         //下面两步省略，自己可以创建一个简单用户表，然后里面设置token 信息
         //4:查询token信息 没查到抛出token无效信息
         //5：设置userId到request里，后续根据userId，获取用户信息
