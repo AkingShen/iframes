@@ -1,6 +1,6 @@
 package com.iframe.interfaces.service;
 
-import com.iframe.interfaces.model.testModel.SysDictEntity;
+import com.iframe.interfaces.model.commonModel.SysDictEntity;
 import org.springframework.stereotype.Component;
 
 @Component

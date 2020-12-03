@@ -1,6 +1,6 @@
-package com.iframe.interfaces.dao.testDao;
+package com.iframe.interfaces.dao.commonDao;
 
-import com.iframe.interfaces.model.testModel.CronConfigEntity;
+import com.iframe.interfaces.model.commonModel.CronConfigEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

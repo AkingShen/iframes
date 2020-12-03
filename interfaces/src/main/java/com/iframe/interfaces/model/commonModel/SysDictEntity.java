@@ -1,4 +1,4 @@
-package com.iframe.interfaces.model.testModel;
+package com.iframe.interfaces.model.commonModel;
 
 
 import lombok.Data;

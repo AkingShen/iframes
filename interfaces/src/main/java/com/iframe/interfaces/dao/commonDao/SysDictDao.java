@@ -1,6 +1,6 @@
-package com.iframe.interfaces.dao.testDao;
+package com.iframe.interfaces.dao.commonDao;
 
-import com.iframe.interfaces.model.testModel.SysDictEntity;
+import com.iframe.interfaces.model.commonModel.SysDictEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SysDictDao extends JpaRepository<SysDictEntity,Integer> {

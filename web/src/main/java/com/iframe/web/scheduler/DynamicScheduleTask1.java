@@ -1,17 +1,12 @@
 package com.iframe.web.scheduler;
 
-import com.iframe.interfaces.dao.testDao.SysCronConfigDao;
-import com.iframe.interfaces.dao.testDao.SysDictDao;
-import org.apache.commons.lang.StringUtils;
+import com.iframe.interfaces.dao.commonDao.SysCronConfigDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 
 @Component

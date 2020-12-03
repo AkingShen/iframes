@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@EnableJpaRepositories("com.iframe.interfaces.dao.*")
+@EnableJpaRepositories("com.iframe.interfaces.dao")
 @EnableTransactionManagement
 public class JPAconfig {
 
@@ -31,7 +31,7 @@ public class JPAconfig {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         //此处com.example.*.model是你的java bean所在的包名
-        factory.setPackagesToScan("com.iframe.interfaces.model.*");
+        factory.setPackagesToScan("com.iframe.interfaces.model");
         factory.setDataSource(dataSource);
 
         Map<String, Object> jpaProperties = new HashMap<String, Object>();
