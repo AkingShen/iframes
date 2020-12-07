@@ -13,6 +13,8 @@ public class RetResponse {
         return new ResponseResult<T>().setCode(RetCodeEnum.SUCCESS).setMsg(SUCCESS).setData(data);
     }
 
+
+
     public static <T> ResponseResult<T> makeErrRsp(String message) {
         return new ResponseResult<T>().setCode(RetCodeEnum.FAIL).setMsg(message);
     }

@@ -54,6 +54,12 @@ public class UserAccountEntity {
     @Column(name = "update_time")
     private Date updateTime;
 
+    @Column(name = "role")
+    private String  role;
+
+    @Column(name = "org_id")
+    private String orgId;
+
     public String getUserId() {
         return userId;
     }
@@ -164,5 +170,21 @@ public class UserAccountEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 }

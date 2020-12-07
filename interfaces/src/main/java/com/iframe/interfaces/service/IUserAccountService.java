@@ -13,4 +13,18 @@ public interface IUserAccountService {
      * @return
      */
     boolean addUserAccount(UserAccountEntity entity);
+
+
+    /**
+     *
+     * 根据用户名寻找用户实例
+     */
+    UserAccountEntity getByUserName(String userName);
+
+
+    /**
+     * 用户权限验证
+     */
+    String checkUser(UserAccountEntity entity,UserAccountEntity entitDb);
+
 }
