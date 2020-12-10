@@ -2,8 +2,11 @@ package com.iframe.interfaces.service.impl;
 
 import com.iframe.common.utils.JwtUtils;
 import com.iframe.common.utils.PasswordUtil;
+import com.iframe.common.utils.RedisUtils;
 import com.iframe.interfaces.dao.UserAccountDao;
 import com.iframe.interfaces.model.UserAccountEntity;
+import com.iframe.interfaces.model.dto.LoginDto;
+import com.iframe.interfaces.model.vo.LoginVo;
 import com.iframe.interfaces.service.IUserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,10 @@ import java.util.UUID;
 
 @Service
 public class UserAccountServiceImpl implements IUserAccountService {
+
+    @Autowired
+    RedisUtils redisUtils;
+
 
     @Autowired
     UserAccountDao userAccountDao;
@@ -37,12 +44,29 @@ public class UserAccountServiceImpl implements IUserAccountService {
     }
 
     @Override
-    public String checkUser(UserAccountEntity entity,UserAccountEntity entitDb) {
-        if(PasswordUtil.verify(entity.getPassword(),entitDb.getPassword())){
+    public LoginVo checkUser(LoginDto entity, UserAccountEntity entityDb) throws Exception {
+        LoginVo loginVo = new LoginVo();
+        if(PasswordUtil.verify(entity.getPassword(),entityDb.getPassword())){
+            String token =  "";
             //生成token
-            return  JwtUtils.createToken(entitDb.getUserId(),entitDb.getRealName(),entity.getUserName());
+            try{
+                token =  JwtUtils.createToken(entityDb.getUserId(),entityDb.getRealName(),entity.getUserName());
+            }catch (Exception e){
+                throw new Exception("生成令牌错误");
+            }
+            //生成缓存
+            redisUtils.set(entityDb.getUserId(),token,0);
+
+            loginVo.setUserId(entityDb.getUserId());
+            loginVo.setToken(token);
+            return  loginVo;
         }
         return null;
+    }
+
+    @Override
+    public UserAccountEntity getByUserId(String userId) {
+        return userAccountDao.getByUserId(userId);
     }
 
 

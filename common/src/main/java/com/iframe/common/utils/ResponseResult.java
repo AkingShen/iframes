@@ -10,7 +10,6 @@ public class ResponseResult<T> {
 
     private T data;
 
-    private String token;
 
     public ResponseResult<T> setCode(RetCodeEnum retCode) {
         this.code = retCode.code;
@@ -42,13 +41,5 @@ public class ResponseResult<T> {
     public ResponseResult<T> setData(T data) {
         this.data = data;
         return this;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

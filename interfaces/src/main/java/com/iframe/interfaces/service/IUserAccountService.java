@@ -1,6 +1,8 @@
 package com.iframe.interfaces.service;
 
 import com.iframe.interfaces.model.UserAccountEntity;
+import com.iframe.interfaces.model.dto.LoginDto;
+import com.iframe.interfaces.model.vo.LoginVo;
 import org.springframework.stereotype.Component;
 
 
@@ -25,6 +27,14 @@ public interface IUserAccountService {
     /**
      * 用户权限验证
      */
-    String checkUser(UserAccountEntity entity,UserAccountEntity entitDb);
+    LoginVo checkUser(LoginDto entity, UserAccountEntity entitDb) throws Exception;
+
+    /**
+     *
+     * 根据用户Id获取用户实体
+     * @param userId
+     * @return
+     */
+    UserAccountEntity getByUserId(String userId);
 
 }

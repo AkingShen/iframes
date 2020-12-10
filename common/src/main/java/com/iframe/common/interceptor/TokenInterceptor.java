@@ -1,9 +1,13 @@
 package com.iframe.common.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.iframe.common.annotations.CheckToken;
+import com.iframe.common.utils.JwtUtils;
+import com.iframe.common.utils.RedisUtils;
 import com.iframe.common.utils.RetResponse;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,6 +23,10 @@ public class TokenInterceptor  extends HandlerInterceptorAdapter {
     public TokenInterceptor() {
         super();
     }
+
+    @Autowired
+    RedisUtils redisUtils;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 免token注解
@@ -35,10 +43,10 @@ public class TokenInterceptor  extends HandlerInterceptorAdapter {
             return true;
         }
         //2:header中拿token
-        String token = request.getHeader("token");
+        String token = request.getHeader("X-token");
         if(StringUtils.isBlank(token)){
             // 没有从request中拿
-            token = request.getParameter("token");
+            token = request.getParameter("X-token");
         }
 
         //3:token为空
@@ -59,12 +67,27 @@ public class TokenInterceptor  extends HandlerInterceptorAdapter {
 
             return  false;
         }
-        //验证token 正确性
-
-        //下面两步省略，自己可以创建一个简单用户表，然后里面设置token 信息
-        //4:查询token信息 没查到抛出token无效信息
-        //5：设置userId到request里，后续根据userId，获取用户信息
-        //return  true表示通过了拦截器 可以执行下面的操作
+        //当token存在时，userId一定会存在，无需判断是否村存在
+        //jwt验证token;
+        String userId = request.getHeader("X-userId");
+        DecodedJWT jwt = null;
+        try{
+             jwt = JwtUtils.verifyToken(token,userId);
+        }catch (Exception e){
+            return false;
+        }
+        if(userId.equals(jwt.getClaim("userId").toString())){
+            return false;
+        }
+        //先去缓存中寻找是否存在改token;
+        Object object = redisUtils.get(userId,0);
+        if(null == object){
+            return false;
+        }
+        String redisToken = (String)object;
+        if(!redisToken.equals(token)){
+            return false;
+        }
         return true;
     }
     @Override

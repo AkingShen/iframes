@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserAccountDao extends JpaRepository<UserAccountEntity, Integer> {
 
+
     UserAccountEntity getByUserName(String userName);
+
+
+    UserAccountEntity getByUserId(String userId);
 
 }

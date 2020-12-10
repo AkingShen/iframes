@@ -1,6 +1,7 @@
 package com.iframe.interfaces.model;
 
 
+import com.iframe.interfaces.model.commonModel.CommonEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "user_account")
-public class UserAccountEntity {
+public class UserAccountEntity extends CommonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,20 +40,12 @@ public class UserAccountEntity {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "update_user")
-    private String updateUser;
-
-    @Column(name = "create_time")
-    private Date createTime;
-
     @Column(name = "last_login_time")
     private Date lastLoginTime;
 
     @Column(name = "login_nums")
     private int loginNums;
 
-    @Column(name = "update_time")
-    private Date updateTime;
 
     @Column(name = "role")
     private String  role;
@@ -124,21 +117,6 @@ public class UserAccountEntity {
         this.phone = phone;
     }
 
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
     public Date getLastLoginTime() {
         return lastLoginTime;
@@ -154,14 +132,6 @@ public class UserAccountEntity {
 
     public void setLoginNums(int loginNums) {
         this.loginNums = loginNums;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 
     public Integer getId() {

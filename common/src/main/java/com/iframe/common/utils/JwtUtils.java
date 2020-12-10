@@ -24,7 +24,7 @@ public class JwtUtils {
                 .withIssuedAt(new Date())    //发行时间
                 .withExpiresAt(expiresDate)  //有效时间
                 .withClaim("userName", userName)    //载荷，随便写几个都可以
-                .withClaim("realName", realName)
+                .withClaim("userId", userId)
                 //追加权限
                 .sign(Algorithm.HMAC256(userId+"HelloLehr"));   //加密
     }
