@@ -19,6 +19,7 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -172,7 +173,8 @@ public class DynamicScheduleTask1 implements SchedulingConfigurer {
         }
 
         String url  = "https://restapi.amap.com/v3/place/text";
-        String params = "citylimit=true&types=090000&key=c3a741cea743555498d279fc1c40623b&extensions=all&output=JSON&offset=50";
+        String params = "citylimit=true&key=c3a741cea743555498d279fc1c40623b&extensions=all&output=JSON&offset=50";
+        params= params+"&types=" + URLEncoder.encode("090200|090100");
         params = params + "&city="+die.getAdcode();
         if(currentNums == 0){
             params = params + "&page=1";
