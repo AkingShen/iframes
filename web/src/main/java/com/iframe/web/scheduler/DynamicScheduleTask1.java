@@ -193,6 +193,11 @@ public class DynamicScheduleTask1 implements SchedulingConfigurer {
         System.out.println("<=======================================>  参数准备就绪 :  adcode : "+params +"<======================================>");
         String  str = HttpUtil.doGetRequest(url,params);
         JsonRootBean jsonRootBean =  JSONArray.parseObject(str, JsonRootBean.class);
+        if(Integer.valueOf(jsonRootBean.getCount()) == 0){
+            concurrentHashMap.put("nums",0);
+            concurrentHashMap.put("currentNums",0);
+            return;
+        }
         //插入DB
         insertDb(jsonRootBean);
         int count= Integer.valueOf(jsonRootBean.getCount());
@@ -200,6 +205,7 @@ public class DynamicScheduleTask1 implements SchedulingConfigurer {
         if(count%50 != 0){
             nums= nums +1;
         }
+
         concurrentHashMap.put("nums",nums);
         System.out.println("<=======================================>  高德数据  pull over <======================================>");
         System.out.println("<=======================================>  本次请求结束 :  响应参数: "+str +"<======================================>");
