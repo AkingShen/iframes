@@ -171,6 +171,10 @@ public class DynamicScheduleTask1 implements SchedulingConfigurer {
             System.out.println("<=======================================>  结束任务 : "+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) +"<======================================>");
             return;
         }
+        if(code > 1768){
+            System.out.println("已经完成");
+            return;
+        }
 
         String url  = "https://restapi.amap.com/v3/place/text";
         String params = "citylimit=true&key=c3a741cea743555498d279fc1c40623b&extensions=all&output=JSON&offset=50";
