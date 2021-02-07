@@ -176,9 +176,11 @@ public class DynamicScheduleTask1 implements SchedulingConfigurer {
         params = params + "&city="+die.getAdcode();
         if(currentNums == 0){
             params = params + "&page=1";
+            concurrentHashMap.put("currentNums",1);
         }else{
             params = params + "&page="+currentNums;
         }
+
         System.out.println( "================currentNums :" +currentNums+"<===================>");
         System.out.println( "================adCode :" +die.getAdcode()+"<===================>");
         System.out.println("<=======================================>  高德数据  pull start  <======================================>");
