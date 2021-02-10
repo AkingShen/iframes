@@ -69,7 +69,7 @@ public class DynamicScheduleTask1 implements SchedulingConfigurer {
     }
 
     public  void getAdCode(){
-        Integer code = 0;
+        Integer code = 869;
         Integer nums = 0;
         int currentNums =  0;
         if(!concurrentHashMap.containsKey("currentCode")){
@@ -171,13 +171,13 @@ public class DynamicScheduleTask1 implements SchedulingConfigurer {
             System.out.println("<=======================================>  结束任务 : "+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) +"<======================================>");
             return;
         }
-        if(code > 1768){
+        if(code > 1769){
             System.out.println("已经完成");
             return;
         }
 
         String url  = "https://restapi.amap.com/v3/place/text";
-        String params = "citylimit=true&key=c3a741cea743555498d279fc1c40623b&extensions=all&output=JSON&offset=50";
+        String params = "citylimit=true&key=07b58a5cc23acbb11788fe55c65c19b7&extensions=all&output=JSON&offset=50";
         params= params+"&types=" + URLEncoder.encode("090200|090100");
         params = params + "&city="+die.getAdcode();
         if(currentNums == 0){
