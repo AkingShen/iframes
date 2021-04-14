@@ -67,18 +67,4 @@ public class UserAccountController {
        return RetResponse.makeOKRsp(loginVo);
     }
 
-    @ApiOperation(value="地图关键字接口搜索", notes="地图关键字接口搜索")
-    @RequestMapping(value ="/search",method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseResult<String> search( @RequestBody LoginDto loginDto) throws Exception {
-        String res = "";
-//        String url = "https://restapi.amap.com/v3/place/text?keywords=北京大学&city=beijing&output=xml&offset=20&page=1&key=<用户的key>&extensions=all";
-        String url  = "https://restapi.amap.com/v3/place/text";
-        String params = "city=610113&citylimit=true&offset=500&types=090000&page=2&key=c3a741cea743555498d279fc1c40623b&extensions=all&output=JSON";
-        DistrictsInfoEntity die = districtInfoDao.getById(1);
-//        String  str = HttpUtil.doGetRequest(url,params);
-//        JsonRootBean jsonRootBean =  JSONArray.parseObject(str, JsonRootBean.class);
-        return RetResponse.makeOKRsp("finish_Work");
-    }
-
 }
