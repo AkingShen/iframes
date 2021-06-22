@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
 
@@ -42,7 +43,8 @@ public class BigDataController {
 
     public  void testLoad() throws Exception{
         System.out.println("============================开始时间：" + new Date()+"==================================");
-        FileInputStream in = new FileInputStream("D:\\hospitalBuy\\外购医院表.xlsx");
+        String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
+        FileInputStream in = new FileInputStream(path);
         Workbook wk = StreamingReader.builder()
                 .rowCacheSize(100)  //缓存到内存中的行数，默认是10
                 .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
