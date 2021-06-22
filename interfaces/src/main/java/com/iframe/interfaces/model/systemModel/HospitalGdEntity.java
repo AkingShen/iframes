@@ -7,8 +7,8 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "hospitals")
-public class HospitalsInfoEntity {
+@Table(name = "hospital_gd")
+public class HospitalGdEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
