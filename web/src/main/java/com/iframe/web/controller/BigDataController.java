@@ -51,6 +51,7 @@ public class BigDataController {
                 .open(in);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
         Sheet sheet = wk.getSheetAt(0);
         List<String>  res1 = new ArrayList<>();
+        List<String> list = new ArrayList<>();
 //        //遍历所有的行
         for (Row row : sheet) {
             System.out.println("开始遍历第" + row.getRowNum() + "行数据：");
@@ -61,7 +62,7 @@ public class BigDataController {
             String hosName = row.getCell(8).getStringCellValue();
             String city = row.getCell(13).getStringCellValue();
             String alias = "";
-            List<String> list = new ArrayList<>();
+
             if( row.getCell(9) == null || row.getCell(9).equals(" ")){
                 list = hospitalGdDao.findByHospitalNameLike(city,hosName);
             }else{
