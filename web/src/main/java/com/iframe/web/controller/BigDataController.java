@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 @RestController
@@ -41,9 +42,20 @@ public class BigDataController {
     }
 
 
+    @CheckToken(value = false)
+    @ApiOperation(value="清洗数据", notes="清洗数据")
+    @RequestMapping(value ="/cleanExcel",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult cleanExcel(Integer levelType) throws Exception {
+        testClean();
+        return RetResponse.makeOKRsp(11);
+    }
+
+
     public  void testLoad() throws Exception{
         System.out.println("============================开始时间：" + new Date()+"==================================");
         String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
+//        String path ="D:\\hospitalBuy\\外购医院表.xlsx";
         FileInputStream in = new FileInputStream(path);
         Workbook wk = StreamingReader.builder()
                 .rowCacheSize(100)  //缓存到内存中的行数，默认是10
@@ -57,8 +69,7 @@ public class BigDataController {
             System.out.println("开始遍历第" + row.getRowNum() + "行数据：");
             //遍历所有的列
 
-                System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
-
+            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
             String hosName = row.getCell(8).getStringCellValue();
             String city = row.getCell(13).getStringCellValue();
             String alias = "";
@@ -75,35 +86,65 @@ public class BigDataController {
             System.out.println("======当前命中数:"+res1.size()+ " ");
         }
         System.out.println("============================结束时间：" + new Date()+"==================================");
-//        FileInputStream ins = new FileInputStream("D:\\hospitalBuy\\gdName.xlsx");
-//        Workbook wks = StreamingReader.builder()
-//                .rowCacheSize(100)  //缓存到内存中的行数，默认是10
-//                .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
-//                .open(ins);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
-//        Sheet sheets = wks.getSheetAt(0);
-//        List<String> res2 = new ArrayList<>();
-//        //遍历所有的行
-//        for (Row row : sheets) {
-//            System.out.println("开始遍历第" + row.getRowNum() + "行数据：");
-//            //遍历所有的列
-//
-//            System.out.print("======"+row.getCell(0).getStringCellValue() + " ");
-//
-//            String hosName = row.getCell(0).getStringCellValue();
-//            res2.add(hosName);
-//
-//        }
-//        List<String> result  = new ArrayList<>();
-//       for(int i = 0;i<res2.size();i++){
-//           for(int j = 0;j<res1.size();j++){
-//               if(res1.get(j).contains(res2.get(i))){
-//                   result.add(res1.get(j));
-//               }
-//           }
-//       }
-
-
     }
+
+
+    public void testClean() throws FileNotFoundException {
+
+            System.out.println("============================开始时间：" + new Date()+"==================================");
+           String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
+//            String path ="D:\\hospitalBuy\\外购医院表.xlsx";
+            FileInputStream ins = new FileInputStream(path);
+            Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ins);
+            Sheet sheet = wk.getSheetAt(0);
+            List<String>  res1 = new ArrayList<>();
+            List<HospitalGdEntity> list = new ArrayList<>();
+        for (Row row : sheet) {
+            System.out.println("开始遍历第" + row.getRowNum() + "行数据：");
+            //遍历所有的列
+            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
+
+            //先去除名字里的省市区
+            String hosName = row.getCell(8).getStringCellValue()
+                    .replace("省","")
+                    .replace("市","")
+                    .replace("区","")
+                    .replace("自治区","")
+                    .replace("县","")
+                    .replace("盟","")
+                    .replace("旗","")
+                    .replace("自治州","")
+                    .replace("新疆生产建设兵团","");
+            String province = row.getCell(11).getStringCellValue().replace("省","").replace("自治区","");
+            String city = row.getCell(12).getStringCellValue().replace("市","").replace("自治州","").replace("盟","").replace("县","");
+            String district = row.getCell(13).getStringCellValue().replace("区","").replace("县","").replace("旗","");
+            hosName = hosName.replace(province,"").replace(city,"").replace(district,"");
+
+
+            HospitalGdEntity hos = new HospitalGdEntity();
+            hos.setHospitalName(row.getCell(8).getStringCellValue());
+            if (row.getCell(9) == null || row.getCell(9).equals(" ")) {
+                hos.setHospitalAlias("");
+            } else {
+                hos.setHospitalAlias(row.getCell(9).getStringCellValue());
+            }
+            hos.setAmpCode(hosName);
+            hos.setProvince(row.getCell(11).getStringCellValue());
+            hos.setCity(row.getCell(12).getStringCellValue());
+            hos.setDistrict(row.getCell(13).getStringCellValue());
+            hos.setAdress(row.getCell(14).getStringCellValue());
+            hos.setType(row.getCell(15).getStringCellValue());
+            hos.setLevel(row.getCell(16).getStringCellValue());
+//            hospitalGdDao.save(hos);
+            list.add(hos);
+
+            System.out.println("====当前简称===：" +  hosName);
+        }
+        hospitalGdDao.saveAll(list);
+    }
+
+
+
 
 
 }
