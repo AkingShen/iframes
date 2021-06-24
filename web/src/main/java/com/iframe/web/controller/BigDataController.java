@@ -187,36 +187,36 @@ public class BigDataController {
              hosName = hosName.replace(province,"").replace(city,"").replace(district,"");
 
 
-             HospitalGdEntity hos = new HospitalGdEntity();
-             hos.setHospitalName(row.getCell(0).getStringCellValue());
-             hos.setHospitalAlias(row.getCell(1).getStringCellValue());
-             hos.setAmpCode(row.getCell(2).getStringCellValue());
-             hos.setAdCode(row.getCell(5).getStringCellValue());
-             hos.setProvince(row.getCell(6).getStringCellValue());
-             hos.setProvinceCode(row.getCell(7).getStringCellValue());
-             hos.setCity(row.getCell(8).getStringCellValue());
-             hos.setCityCode(row.getCell(9).getStringCellValue());
-             hos.setDistrict(row.getCell(10).getStringCellValue());
-             hos.setDistrictCode(row.getCell(11).getStringCellValue());
-             if (row.getCell(12) == null || row.getCell(12).equals(" ")) {
-                 hos.setAdress("");
-             } else {
-                 hos.setAdress(row.getCell(12).getStringCellValue());
-             }
-
-             hos.setLocationX(row.getCell(13).getStringCellValue());
-             hos.setLocationY(row.getCell(14).getStringCellValue());
-             hos.setLocationY(row.getCell(14).getStringCellValue());
-             hos.setShortName(hosName);
+//             HospitalGdEntity hos = new HospitalGdEntity();
+//             hos.setHospitalName(row.getCell(0).getStringCellValue());
+//             hos.setHospitalAlias(row.getCell(1).getStringCellValue());
+//             hos.setAmpCode(row.getCell(2).getStringCellValue());
+//             hos.setAdCode(row.getCell(5).getStringCellValue());
+//             hos.setProvince(row.getCell(6).getStringCellValue());
+//             hos.setProvinceCode(row.getCell(7).getStringCellValue());
+//             hos.setCity(row.getCell(8).getStringCellValue());
+//             hos.setCityCode(row.getCell(9).getStringCellValue());
+//             hos.setDistrict(row.getCell(10).getStringCellValue());
+//             hos.setDistrictCode(row.getCell(11).getStringCellValue());
+//             if (row.getCell(12) == null || row.getCell(12).equals(" ")) {
+//                 hos.setAdress("");
+//             } else {
+//                 hos.setAdress(row.getCell(12).getStringCellValue());
+//             }
+//
+//             hos.setLocationX(row.getCell(13).getStringCellValue());
+//             hos.setLocationY(row.getCell(14).getStringCellValue());
+//             hos.setLocationY(row.getCell(14).getStringCellValue());
+//             hos.setShortName(hosName);
 
 
 //            hospitalGdDao.save(hos);
-             list.add(hos);
+//             list.add(hos);
 
              System.out.println("====当前简称===：" +  hosName);
          }
          System.out.println("====开始导入==============================");
-         hospitalGdDao.saveAll(list);
+//         hospitalGdDao.saveAll(list);
      }
 
 
