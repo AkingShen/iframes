@@ -157,9 +157,11 @@ public class BigDataController {
      public void testGdClean() throws FileNotFoundException {
          System.out.println("============================开始时间：" + new Date()+"==================================");
          String path = File.separator +"usr"+File.separator+"java"+File.separator+"gdsj.xlsx";
-
+//         String path ="D:\\hospitalBuy\\gdsj.xlsx";
          FileInputStream ins = new FileInputStream(path);
-         Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(1024).open(ins);
+         System.out.println("============================开始第一步解析：" + new Date()+"==================================");
+         Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ins);
+         System.out.println("============================开始第二步解析：" + new Date()+"==================================");
          Sheet sheet = wk.getSheetAt(0);
          List<String>  res1 = new ArrayList<>();
          List<HospitalGdEntity> list = new ArrayList<>();
