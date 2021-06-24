@@ -171,20 +171,20 @@ public class BigDataController {
              System.out.println("======"+row.getCell(0).getStringCellValue() + " ");
 
              //先去除名字里的省市区
-             String hosName = row.getCell(0).getStringCellValue()
-                     .replace("省","")
-                     .replace("市","")
-                     .replace("区","")
-                     .replace("自治区","")
-                     .replace("县","")
-                     .replace("盟","")
-                     .replace("旗","")
-                     .replace("自治州","")
-                     .replace("新疆生产建设兵团","");
-             String province = row.getCell(6).getStringCellValue().replace("省","").replace("自治区","");
-             String city = row.getCell(8).getStringCellValue().replace("市","").replace("自治州","").replace("盟","").replace("县","");
-             String district = row.getCell(10).getStringCellValue().replace("区","").replace("县","").replace("旗","");
-             hosName = hosName.replace(province,"").replace(city,"").replace(district,"");
+//             String hosName = row.getCell(0).getStringCellValue()
+//                     .replace("省","")
+//                     .replace("市","")
+//                     .replace("区","")
+//                     .replace("自治区","")
+//                     .replace("县","")
+//                     .replace("盟","")
+//                     .replace("旗","")
+//                     .replace("自治州","")
+//                     .replace("新疆生产建设兵团","");
+//             String province = row.getCell(6).getStringCellValue().replace("省","").replace("自治区","");
+//             String city = row.getCell(8).getStringCellValue().replace("市","").replace("自治州","").replace("盟","").replace("县","");
+//             String district = row.getCell(10).getStringCellValue().replace("区","").replace("县","").replace("旗","");
+//             hosName = hosName.replace(province,"").replace(city,"").replace(district,"");
 
 
 //             HospitalGdEntity hos = new HospitalGdEntity();
@@ -213,7 +213,7 @@ public class BigDataController {
 //            hospitalGdDao.save(hos);
 //             list.add(hos);
 
-             System.out.println("====当前简称===：" +  hosName);
+             System.out.println("====当前简称===：");
          }
          System.out.println("====开始导入==============================");
 //         hospitalGdDao.saveAll(list);
