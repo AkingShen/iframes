@@ -157,7 +157,7 @@ public class BigDataController {
      public void testGdClean() throws FileNotFoundException {
          System.out.println("============================开始时间：" + new Date()+"==================================");
          String path = File.separator +"usr"+File.separator+"java"+File.separator+"gdsj.xlsx";
-         
+
          FileInputStream ins = new FileInputStream(path);
          Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ins);
          Sheet sheet = wk.getSheetAt(0);
@@ -208,11 +208,12 @@ public class BigDataController {
              hos.setShortName(hosName);
 
 
-            hospitalGdDao.save(hos);
+//            hospitalGdDao.save(hos);
              list.add(hos);
 
              System.out.println("====当前简称===：" +  hosName);
          }
+         System.out.println("====开始导入==============================");
          hospitalGdDao.saveAll(list);
      }
 
