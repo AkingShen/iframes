@@ -160,7 +160,7 @@ public class BigDataController {
 //         String path ="D:\\hospitalBuy\\gdsj.xlsx";
          FileInputStream ins = new FileInputStream(path);
          System.out.println("============================开始第一步解析：" + new Date()+"==================================");
-         Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ins);
+         Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(8192).open(ins);
          System.out.println("============================开始第二步解析：" + new Date()+"==================================");
          Sheet sheet = wk.getSheetAt(0);
          List<String>  res1 = new ArrayList<>();
