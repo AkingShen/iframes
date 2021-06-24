@@ -159,7 +159,7 @@ public class BigDataController {
          String path = File.separator +"usr"+File.separator+"java"+File.separator+"gdsj.xlsx";
 
          FileInputStream ins = new FileInputStream(path);
-         Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ins);
+         Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(1024).open(ins);
          Sheet sheet = wk.getSheetAt(0);
          List<String>  res1 = new ArrayList<>();
          List<HospitalGdEntity> list = new ArrayList<>();
