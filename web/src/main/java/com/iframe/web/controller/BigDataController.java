@@ -101,8 +101,8 @@ public class BigDataController {
     public void testClean() throws FileNotFoundException {
 
             System.out.println("============================开始时间：" + new Date()+"==================================");
-//           String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
-            String path ="D:\\hospitalBuy\\外购医院表.xlsx";
+           String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
+//            String path ="D:\\hospitalBuy\\外购医院表.xlsx";
             FileInputStream ins = new FileInputStream(path);
             Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ins);
             Sheet sheet = wk.getSheetAt(0);
@@ -160,7 +160,7 @@ public class BigDataController {
 //         String path ="D:\\hospitalBuy\\gdsj.xlsx";
          FileInputStream ins = new FileInputStream(path);
          System.out.println("============================开始第一步解析：" + new Date()+"==================================");
-         Workbook wk = StreamingReader.builder().rowCacheSize(50).bufferSize(4096).open(ins);
+         Workbook wk = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ins);
          System.out.println("============================开始第二步解析：" + new Date()+"==================================");
          Sheet sheet = wk.getSheetAt(0);
          List<String>  res1 = new ArrayList<>();
@@ -170,53 +170,53 @@ public class BigDataController {
              //遍历所有的列
              System.out.println("======"+row.getCell(0).getStringCellValue() + " ");
 
-             //先去除名字里的省市区
-//             String hosName = row.getCell(0).getStringCellValue()
-//                     .replace("省","")
-//                     .replace("市","")
-//                     .replace("区","")
-//                     .replace("自治区","")
-//                     .replace("县","")
-//                     .replace("盟","")
-//                     .replace("旗","")
-//                     .replace("自治州","")
-//                     .replace("新疆生产建设兵团","");
-//             String province = row.getCell(6).getStringCellValue().replace("省","").replace("自治区","");
-//             String city = row.getCell(8).getStringCellValue().replace("市","").replace("自治州","").replace("盟","").replace("县","");
-//             String district = row.getCell(10).getStringCellValue().replace("区","").replace("县","").replace("旗","");
-//             hosName = hosName.replace(province,"").replace(city,"").replace(district,"");
+//             先去除名字里的省市区
+             String hosName = row.getCell(0).getStringCellValue()
+                     .replace("省","")
+                     .replace("市","")
+                     .replace("区","")
+                     .replace("自治区","")
+                     .replace("县","")
+                     .replace("盟","")
+                     .replace("旗","")
+                     .replace("自治州","")
+                     .replace("新疆生产建设兵团","");
+             String province = row.getCell(6).getStringCellValue().replace("省","").replace("自治区","");
+             String city = row.getCell(8).getStringCellValue().replace("市","").replace("自治州","").replace("盟","").replace("县","");
+             String district = row.getCell(10).getStringCellValue().replace("区","").replace("县","").replace("旗","");
+             hosName = hosName.replace(province,"").replace(city,"").replace(district,"");
 
 
-//             HospitalGdEntity hos = new HospitalGdEntity();
-//             hos.setHospitalName(row.getCell(0).getStringCellValue());
-//             hos.setHospitalAlias(row.getCell(1).getStringCellValue());
-//             hos.setAmpCode(row.getCell(2).getStringCellValue());
-//             hos.setAdCode(row.getCell(5).getStringCellValue());
-//             hos.setProvince(row.getCell(6).getStringCellValue());
-//             hos.setProvinceCode(row.getCell(7).getStringCellValue());
-//             hos.setCity(row.getCell(8).getStringCellValue());
-//             hos.setCityCode(row.getCell(9).getStringCellValue());
-//             hos.setDistrict(row.getCell(10).getStringCellValue());
-//             hos.setDistrictCode(row.getCell(11).getStringCellValue());
-//             if (row.getCell(12) == null || row.getCell(12).equals(" ")) {
-//                 hos.setAdress("");
-//             } else {
-//                 hos.setAdress(row.getCell(12).getStringCellValue());
-//             }
-//
-//             hos.setLocationX(row.getCell(13).getStringCellValue());
-//             hos.setLocationY(row.getCell(14).getStringCellValue());
-//             hos.setLocationY(row.getCell(14).getStringCellValue());
-//             hos.setShortName(hosName);
+             HospitalGdEntity hos = new HospitalGdEntity();
+             hos.setHospitalName(row.getCell(0).getStringCellValue());
+             hos.setHospitalAlias(row.getCell(1).getStringCellValue());
+             hos.setAmpCode(row.getCell(2).getStringCellValue());
+             hos.setAdCode(row.getCell(5).getStringCellValue());
+             hos.setProvince(row.getCell(6).getStringCellValue());
+             hos.setProvinceCode(row.getCell(7).getStringCellValue());
+             hos.setCity(row.getCell(8).getStringCellValue());
+             hos.setCityCode(row.getCell(9).getStringCellValue());
+             hos.setDistrict(row.getCell(10).getStringCellValue());
+             hos.setDistrictCode(row.getCell(11).getStringCellValue());
+             if (row.getCell(12) == null || row.getCell(12).equals(" ")) {
+                 hos.setAdress("");
+             } else {
+                 hos.setAdress(row.getCell(12).getStringCellValue());
+             }
+
+             hos.setLocationX(row.getCell(13).getStringCellValue());
+             hos.setLocationY(row.getCell(14).getStringCellValue());
+             hos.setLocationY(row.getCell(14).getStringCellValue());
+             hos.setShortName(hosName);
 
 
 //            hospitalGdDao.save(hos);
-//             list.add(hos);
+             list.add(hos);
 
              System.out.println("====当前简称===：");
          }
          System.out.println("====开始导入==============================");
-//         hospitalGdDao.saveAll(list);
+         hospitalGdDao.saveAll(list);
      }
 
 
