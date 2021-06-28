@@ -14,4 +14,13 @@ public interface HospitalGdDao extends JpaRepository<HospitalGdEntity,Integer> {
 
       @Query(value = "select h.hospitalName from HospitalGdEntity h  where h.district = ?1  and h.hospitalName like %?2% ")
       List<String> findByHospitalNameLike(String district,String hospitalName);
+
+
+
+    @Query(value = "select h.hospitalName from HospitalGdEntity h  where h.district =?1  and h.shortName =?2  and  h.city =?3  ")
+    List<String> findByDistrictAndHospitalNameAndCity(String district,String hospitalName, String city);
+
+
+    @Query(value = "select h.hospitalName from HospitalGdEntity h  where h.district = ?1  and h.hospitalName like %?2% ")
+    List<String> findByHospitalName(String district,String hospitalName);
 }

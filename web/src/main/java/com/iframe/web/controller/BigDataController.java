@@ -37,7 +37,7 @@ public class BigDataController {
     @RequestMapping(value ="/getExcelData",method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult getProvince(Integer levelType) throws Exception {
-        testLoad();
+        testFinalLoad();
         return RetResponse.makeOKRsp(11);
     }
 
@@ -62,39 +62,39 @@ public class BigDataController {
 
 
     public  void testLoad() throws Exception{
-        System.out.println("============================开始时间：" + new Date()+"==================================");
-        String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
-//        String path ="D:\\hospitalBuy\\外购医院表.xlsx";
-        FileInputStream in = new FileInputStream(path);
-        Workbook wk = StreamingReader.builder()
-                .rowCacheSize(100)  //缓存到内存中的行数，默认是10
-                .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
-                .open(in);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
-        Sheet sheet = wk.getSheetAt(0);
-        List<String>  res1 = new ArrayList<>();
-        List<String> list = new ArrayList<>();
-//        //遍历所有的行
-        for (Row row : sheet) {
-            System.out.println("开始遍历第" + row.getRowNum() + "行数据：");
-            //遍历所有的列
-
-            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
-            String hosName = row.getCell(8).getStringCellValue();
-            String city = row.getCell(13).getStringCellValue();
-            String alias = "";
-
-            if( row.getCell(9) == null || row.getCell(9).equals(" ")){
-                list = hospitalGdDao.findByHospitalNameLike(city,hosName);
-            }else{
-                String hosAlias = row.getCell(9).getStringCellValue();
-                list = hospitalGdDao.findByHospitalNameLikeOrHospitalAliasLike(city,hosName,hosAlias);
-            }
-            if(list.size() > 0){
-                res1.add(hosName);
-            }
-            System.out.println("======当前命中数:"+res1.size()+ " ");
-        }
-        System.out.println("============================结束时间：" + new Date()+"==================================");
+//        System.out.println("============================开始时间：" + new Date()+"==================================");
+//        String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
+////        String path ="D:\\hospitalBuy\\外购医院表.xlsx";
+//        FileInputStream in = new FileInputStream(path);
+//        Workbook wk = StreamingReader.builder()
+//                .rowCacheSize(100)  //缓存到内存中的行数，默认是10
+//                .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
+//                .open(in);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
+//        Sheet sheet = wk.getSheetAt(0);
+//        List<String>  res1 = new ArrayList<>();
+//        List<String> list = new ArrayList<>();
+////        //遍历所有的行
+//        for (Row row : sheet) {
+//            System.out.println("开始遍历第" + row.getRowNum() + "行数据：");
+//            //遍历所有的列
+//
+//            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
+//            String hosName = row.getCell(8).getStringCellValue();
+//            String city = row.getCell(13).getStringCellValue();
+//            String alias = "";
+//
+//            if( row.getCell(9) == null || row.getCell(9).equals(" ")){
+//                list = hospitalGdDao.findByHospitalNameLike(city,hosName);
+//            }else{
+//                String hosAlias = row.getCell(9).getStringCellValue();
+//                list = hospitalGdDao.findByHospitalNameLikeOrHospitalAliasLike(city,hosName,hosAlias);
+//            }
+//            if(list.size() > 0){
+//                res1.add(hosName);
+//            }
+//            System.out.println("======当前命中数:"+res1.size()+ " ");
+//        }
+//        System.out.println("============================结束时间：" + new Date()+"==================================");
     }
 
 
@@ -219,6 +219,41 @@ public class BigDataController {
          hospitalGdDao.saveAll(list);
      }
 
+
+
+    public  void testFinalLoad() throws Exception{
+        System.out.println("============================开始时间：" + new Date()+"==================================");
+        String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
+//        String path ="D:\\hospitalBuy\\外购医院表.xlsx";
+        FileInputStream in = new FileInputStream(path);
+        Workbook wk = StreamingReader.builder()
+                .rowCacheSize(100)  //缓存到内存中的行数，默认是10
+                .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
+                .open(in);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
+        Sheet sheet = wk.getSheetAt(0);
+        List<String>  res1 = new ArrayList<>();
+        List<String> list = new ArrayList<>();
+//        //遍历所有的行
+        for (Row row : sheet) {
+            System.out.println("===================开始遍历第" + row.getRowNum() + "行数据=====================");
+            //遍历所有的列
+
+            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
+            String hosName = row.getCell(9).getStringCellValue();
+            String city = row.getCell(12).getStringCellValue();
+            String distict = row.getCell(13).getStringCellValue();
+            System.out.println("====市==>"+city + " ");
+            System.out.println("====区==>"+distict+ " ");
+            System.out.println("====简称==>"+hosName + " ");
+
+            list = hospitalGdDao.findByDistrictAndHospitalNameAndCity(distict,hosName,city);
+            if(list.size() > 0){
+                res1.add(hosName);
+            }
+            System.out.println("======当前命中数:"+res1.size()+ " ");
+        }
+        System.out.println("============================结束时间：" + new Date()+"==================================");
+    }
 
 
 }
