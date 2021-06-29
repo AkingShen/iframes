@@ -369,8 +369,11 @@ public class BigDataController {
                     wg.setLevel(level);
                     break;
             }
-            hospitalGdDao.save(wg);
+            wgList.add(wg);
+            System.out.println("=======第"+wg.getId()+"条===========" + wg.getHospitalName() +"=======导入完成=====");
         }
+        System.out.println("======开始入库=====");
+        hospitalGdDao.saveAll(wgList);
     }
 
 
