@@ -3,7 +3,9 @@ package com.iframe.web.controller;
 import com.iframe.common.annotations.CheckToken;
 import com.iframe.common.utils.ResponseResult;
 import com.iframe.common.utils.RetResponse;
+import com.iframe.interfaces.dao.systemDao.AreaInfoDao;
 import com.iframe.interfaces.dao.systemDao.HospitalGdDao;
+import com.iframe.interfaces.model.systemModel.AreaInfoEntity;
 import com.iframe.interfaces.model.systemModel.HospitalGdEntity;
 import com.monitorjbl.xlsx.StreamingReader;
 import io.swagger.annotations.Api;
@@ -32,14 +34,17 @@ public class BigDataController {
     @Autowired
     private HospitalGdDao hospitalGdDao;
 
-    @CheckToken(value = false)
-    @ApiOperation(value="寻找条目", notes="读取大文件")
-    @RequestMapping(value ="/getExcelData",method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseResult getProvince(Integer levelType) throws Exception {
-        testFinalLoad();
-        return RetResponse.makeOKRsp(11);
-    }
+    @Autowired
+    private AreaInfoDao areaInfoDao;
+
+//    @CheckToken(value = false)
+//    @ApiOperation(value="寻找条目", notes="读取大文件")
+//    @RequestMapping(value ="/getExcelData",method = RequestMethod.GET)
+//    @ResponseBody
+//    public ResponseResult getProvince(Integer levelType) throws Exception {
+//        testFinalLoad();
+//        return RetResponse.makeOKRsp(11);
+//    }
 
 
     @CheckToken(value = false)
@@ -57,6 +62,17 @@ public class BigDataController {
     @ResponseBody
     public ResponseResult cleanGDExcel(Integer levelType) throws Exception {
         testGdClean();
+        return RetResponse.makeOKRsp(11);
+    }
+
+
+
+    @CheckToken(value = false)
+    @ApiOperation(value="提取高德字段以及地区码", notes="清洗数据")
+    @RequestMapping(value ="/getLocation",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult getLocation(Integer levelType) throws Exception {
+        getLocation();
         return RetResponse.makeOKRsp(11);
     }
 
@@ -207,7 +223,7 @@ public class BigDataController {
              hos.setLocationX(row.getCell(13).getStringCellValue());
              hos.setLocationY(row.getCell(14).getStringCellValue());
              hos.setLocationY(row.getCell(14).getStringCellValue());
-             hos.setShortName(hosName);
+//             hos.setShortName(hosName);
 
 
 //            hospitalGdDao.save(hos);
@@ -221,38 +237,140 @@ public class BigDataController {
 
 
 
-    public  void testFinalLoad() throws Exception{
-        System.out.println("============================开始时间：" + new Date()+"==================================");
-        String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
-//        String path ="D:\\hospitalBuy\\外购医院表.xlsx";
-        FileInputStream in = new FileInputStream(path);
-        Workbook wk = StreamingReader.builder()
-                .rowCacheSize(100)  //缓存到内存中的行数，默认是10
-                .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
-                .open(in);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
-        Sheet sheet = wk.getSheetAt(0);
-        List<String>  res1 = new ArrayList<>();
-        List<String> list = new ArrayList<>();
-//        //遍历所有的行
-        for (Row row : sheet) {
-            System.out.println("===================开始遍历第" + row.getRowNum() + "行数据=====================");
-            //遍历所有的列
+//    public  void testFinalLoad() throws Exception{
+//        System.out.println("============================开始时间：" + new Date()+"==================================");
+//        String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
+////        String path ="D:\\hospitalBuy\\外购医院表.xlsx";
+//        FileInputStream in = new FileInputStream(path);
+//        Workbook wk = StreamingReader.builder()
+//                .rowCacheSize(100)  //缓存到内存中的行数，默认是10
+//                .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
+//                .open(in);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
+//        Sheet sheet = wk.getSheetAt(0);
+//        List<String>  res1 = new ArrayList<>();
+//        List<String> list = new ArrayList<>();
+////        //遍历所有的行
+//        for (Row row : sheet) {
+//            System.out.println("===================开始遍历第" + row.getRowNum() + "行数据=====================");
+//            //遍历所有的列
+//
+//            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
+//            String hosName = row.getCell(9).getStringCellValue();
+//            String city = row.getCell(12).getStringCellValue();
+//            String distict = row.getCell(13).getStringCellValue();
+//            System.out.println("====市==>"+city + " ");
+//            System.out.println("====区==>"+distict+ " ");
+//            System.out.println("====简称==>"+hosName + " ");
+//
+//            list = hospitalGdDao.findByDistrictAndHospitalNameAndCity(distict,hosName,city);
+//            if(list.size() > 0){
+//                res1.add(hosName);
+//            }
+//            System.out.println("======当前命中数:"+res1.size()+ " ");
+//        }
+//        System.out.println("============================结束时间：" + new Date()+"==================================");
+//    }
 
-            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
-            String hosName = row.getCell(9).getStringCellValue();
-            String city = row.getCell(12).getStringCellValue();
-            String distict = row.getCell(13).getStringCellValue();
-            System.out.println("====市==>"+city + " ");
-            System.out.println("====区==>"+distict+ " ");
-            System.out.println("====简称==>"+hosName + " ");
 
-            list = hospitalGdDao.findByDistrictAndHospitalNameAndCity(distict,hosName,city);
-            if(list.size() > 0){
-                res1.add(hosName);
+    public  void getLocation() throws Exception{
+       //遍历医院
+        int id = 1;
+        List<HospitalGdEntity> wgList = new ArrayList<>();
+        for(int i = 2; i<324255;i++){
+            //寻找单条医院
+            HospitalGdEntity wg  = hospitalGdDao.getOne(i);
+            //获取省市区地区码;
+            AreaInfoEntity  areaInfoEntity =  areaInfoDao.getCityAndProvince(wg.getCity());
+            String cityCode = "";
+            String provinceCode = "";
+            String distictCode = "";
+            if(areaInfoEntity != null) {
+                 cityCode = String.valueOf(areaInfoEntity.getId());
+                 if(!cityCode.equals("") && cityCode != null  &&!cityCode.equals("null")){
+                    wg.setCityCode(cityCode);
+                 }
+                 provinceCode = String.valueOf(areaInfoEntity.getParentId());
+                if(!provinceCode.equals("") && provinceCode != null &&!provinceCode.equals("null")){
+                    wg.setProvinceCode(provinceCode);
+                 }
+                distictCode = String.valueOf(areaInfoDao.getDistinctId(wg.getDistrict(), Integer.valueOf(cityCode)));
+                if(!distictCode.equals("") && distictCode != null && !distictCode.equals("null")){
+                    wg.setDistrictCode(distictCode);
+                }
             }
-            System.out.println("======当前命中数:"+res1.size()+ " ");
+            String level = "";
+            switch (wg.getLevel()){
+                case "一级甲等":
+                    level = "一级医院";
+                    wg.setLevel(level);
+                    break;
+                case "一级丙等":
+                    level = "一级医院";
+                    wg.setLevel(level);
+                    break;
+                case "一级乙等":
+                    level = "一级医院";
+                    wg.setLevel(level);
+                    break;
+                case "一级未定等":
+                    level = "一级医院";
+                    wg.setLevel(level);
+                    break;
+                case "三级丙等":
+                    level = "三级医院";
+                    wg.setLevel(level);
+                    break;
+                case "三级乙等":
+                    level = "三级乙等";
+                    wg.setLevel(level);
+                    break;
+                case "三级合格":
+                    level = "三级医院";
+                    wg.setLevel(level);
+                    break;
+                case "三级未定等":
+                    level = "三级医院";
+                    wg.setLevel(level);
+                    break;
+                case "三级甲等":
+                    level = "三级甲等";
+                    wg.setLevel(level);
+                    break;
+                case "不适用":
+                    level = "未评级";
+                    wg.setLevel(level);
+                    break;
+                case "二级丙等":
+                    level = "二级医院";
+                    wg.setLevel(level);
+                    break;
+                case "二级乙等":
+                    level = "二级乙等";
+                    wg.setLevel(level);
+                    break;
+                case "二级甲等":
+                    level = "二级甲等";
+                    wg.setLevel(level);
+                    break;
+                case "二级未定等":
+                    level = "二级医院";
+                    wg.setLevel(level);
+                    break;
+                case "未分级":
+                    level = "未评级";
+                    wg.setLevel(level);
+                    break;
+                case "未知":
+                    level = "未评级";
+                    wg.setLevel(level);
+                    break;
+                case "机构等级":
+                    level = "机构等级";
+                    wg.setLevel(level);
+                    break;
+            }
+            hospitalGdDao.save(wg);
         }
-        System.out.println("============================结束时间：" + new Date()+"==================================");
     }
 
 

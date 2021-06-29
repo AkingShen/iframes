@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "hospital_gd_copy")
+@Table(name = "hospitals_wg")
 public class HospitalGdEntity {
 
     @Id
@@ -67,8 +67,8 @@ public class HospitalGdEntity {
     @Column(name = "createTime")
     private Date createTime;
 
-    @Column(name = "short_name")
-    private String shortName;
+//    @Column(name = "short_name")
+//    private String shortName;
 
     public Integer getId() {
         return id;
@@ -206,11 +206,11 @@ public class HospitalGdEntity {
         this.createTime = createTime;
     }
 
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
+//    public String getShortName() {
+//        return shortName;
+//    }
+//
+//    public void setShortName(String shortName) {
+//        this.shortName = shortName;
+//    }
 }
