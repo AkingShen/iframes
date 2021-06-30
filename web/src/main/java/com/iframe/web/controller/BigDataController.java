@@ -276,7 +276,7 @@ public class BigDataController {
        //遍历医院
         int id = 1;
         List<HospitalGdEntity> wgList = new ArrayList<>();
-        for(int i = 162873; i<324255;i++){
+        for(int i = 240882; i<324255;i++){
             //寻找单条医院
             HospitalGdEntity wg  = hospitalGdDao.getOne(i);
             //获取省市区地区码;
