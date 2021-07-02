@@ -5,6 +5,7 @@ import com.iframe.common.utils.ResponseResult;
 import com.iframe.common.utils.RetResponse;
 import com.iframe.interfaces.dao.systemDao.AreaInfoDao;
 import com.iframe.interfaces.dao.systemDao.HospitalGdDao;
+import com.iframe.interfaces.dao.systemDao.HospitalWgDao;
 import com.iframe.interfaces.model.systemModel.AreaInfoEntity;
 import com.iframe.interfaces.model.systemModel.HospitalGdEntity;
 import com.monitorjbl.xlsx.StreamingReader;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,6 +38,9 @@ public class BigDataController {
 
     @Autowired
     private AreaInfoDao areaInfoDao;
+
+    @Autowired
+    private HospitalWgDao hospitalWgDao;
 
 //    @CheckToken(value = false)
 //    @ApiOperation(value="寻找条目", notes="读取大文件")
@@ -71,8 +76,9 @@ public class BigDataController {
     @ApiOperation(value="提取高德字段以及地区码", notes="清洗数据")
     @RequestMapping(value ="/getLocation",method = RequestMethod.GET)
     @ResponseBody
+    @Transactional
     public ResponseResult getLocation(Integer levelType) throws Exception {
-        getLocation();
+        testFinalLoad();
         return RetResponse.makeOKRsp(11);
     }
 
@@ -237,39 +243,50 @@ public class BigDataController {
 
 
 
-//    public  void testFinalLoad() throws Exception{
-//        System.out.println("============================开始时间：" + new Date()+"==================================");
-//        String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
-////        String path ="D:\\hospitalBuy\\外购医院表.xlsx";
-//        FileInputStream in = new FileInputStream(path);
-//        Workbook wk = StreamingReader.builder()
-//                .rowCacheSize(100)  //缓存到内存中的行数，默认是10
-//                .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
-//                .open(in);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
-//        Sheet sheet = wk.getSheetAt(0);
-//        List<String>  res1 = new ArrayList<>();
-//        List<String> list = new ArrayList<>();
-////        //遍历所有的行
-//        for (Row row : sheet) {
-//            System.out.println("===================开始遍历第" + row.getRowNum() + "行数据=====================");
-//            //遍历所有的列
-//
-//            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
-//            String hosName = row.getCell(9).getStringCellValue();
-//            String city = row.getCell(12).getStringCellValue();
-//            String distict = row.getCell(13).getStringCellValue();
-//            System.out.println("====市==>"+city + " ");
-//            System.out.println("====区==>"+distict+ " ");
-//            System.out.println("====简称==>"+hosName + " ");
-//
-//            list = hospitalGdDao.findByDistrictAndHospitalNameAndCity(distict,hosName,city);
-//            if(list.size() > 0){
-//                res1.add(hosName);
-//            }
-//            System.out.println("======当前命中数:"+res1.size()+ " ");
-//        }
-//        System.out.println("============================结束时间：" + new Date()+"==================================");
-//    }
+    @Transactional
+    public  void  testFinalLoad() throws Exception{
+        System.out.println("============================开始时间：" + new Date()+"==================================");
+        String path = File.separator +"usr"+File.separator+"java"+File.separator+"外购医院表.xlsx";
+//        String path ="D:\\hospitalBuy\\外购医院表.xlsx";
+        FileInputStream in = new FileInputStream(path);
+        Workbook wk = StreamingReader.builder()
+                .rowCacheSize(100)  //缓存到内存中的行数，默认是10
+                .bufferSize(4096)  //读取资源时，缓存到内存的字节大小，默认是1024
+                .open(in);  //打开资源，必须，可以是InputStream或者是File，注意：只能打开XLSX格式的文件
+        Sheet sheet = wk.getSheetAt(0);
+        List<String>  res1 = new ArrayList<>();
+        List<HospitalGdEntity> list = new ArrayList<>();
+        List<String> idlist =  new ArrayList<>();
+//        //遍历所有的行
+        for (Row row : sheet) {
+            System.out.println("===================开始遍历第" + row.getRowNum() + "行数据=====================");
+            //遍历所有的列
+
+            System.out.println("======"+row.getCell(8).getStringCellValue() + " ");
+            String hosName = row.getCell(9).getStringCellValue();
+            String city = row.getCell(12).getStringCellValue();
+            String distict = row.getCell(13).getStringCellValue();
+            System.out.println("====市==>"+city + " ");
+            System.out.println("====区==>"+distict+ " ");
+            System.out.println("====简称==>"+hosName + " ");
+
+            list = hospitalGdDao.findByDistrictAndHospitalNameAndCity(distict,hosName,city);
+            if(list.size() > 0){
+                res1.add(hosName);
+                idlist.add(row.getCell(17).getStringCellValue());
+                System.out.println("需要补充经纬度的记录序号: " + row.getCell(17).getStringCellValue());
+                Integer id = Integer.valueOf(row.getCell(17).getStringCellValue().replace("\"",""));
+                hospitalWgDao.saveDoto(list.get(0).getLocationX(),list.get(0).getLocationY(),id);
+            }
+            System.out.println("======当前命中数:"+res1.size()+ " ");
+
+//            return  "ok";
+
+        }
+
+        System.out.println("============================结束时间：" + new Date()+"==================================");
+//        return  "ol";
+    }
 
 
     public  void getLocation() throws Exception{
