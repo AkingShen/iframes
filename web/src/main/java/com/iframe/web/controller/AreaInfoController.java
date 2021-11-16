@@ -26,7 +26,7 @@ public class AreaInfoController {
 
 
     @CheckToken(value = true)
-    @ApiOperation(value="寻找条目", notes="寻找条目, Header : X-token 以及 X-userId")
+    @ApiOperation(value="寻找条目", notes="寻找条目, Header  : X-token 以及 X-userId")
     @RequestMapping(value ="/getProvince",method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult  getProvince(Integer levelType){
